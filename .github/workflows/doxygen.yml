@@ -31,5 +31,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./html
-          force_orphan: true   # Чище история gh-pages
-          # .nojekyll создастся автоматически, если есть файлы с _
+          force_orphan: true   
