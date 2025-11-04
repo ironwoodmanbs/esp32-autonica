@@ -2,7 +2,7 @@ name: Build and Deploy Doxygen Docs
 
 on:
   push:
-    branches: [ main ]
+    branches: [ doxygen-pages ]
   workflow_dispatch:
 
 permissions:
