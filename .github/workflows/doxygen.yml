@@ -28,15 +28,15 @@ jobs:
         run: |
           doxygen Doxyfile
           echo "Generated files:"
-          ls -la html || ls -la docs/html || echo "HTML directory not found"
+          ls -R docs || ls -R html
 
       - name: Upload documentation artifact
         uses: actions/upload-artifact@v4
         with:
           name: doxygen-docs
           path: |
-            html
             docs/html
+            html
 
   deploy:
     name: Prepare Pages artifact
@@ -48,12 +48,27 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: doxygen-docs
-          path: ./html
+          path: ./temp
+
+      - name: Adjust folder structure
+        run: |
+          echo "Contents before move:"
+          ls -R ./temp
+          if [ -d "./temp/docs/html" ]; then
+            mv ./temp/docs/html ./site
+          elif [ -d "./temp/html" ]; then
+            mv ./temp/html ./site
+          else
+            echo "Error: HTML directory not found"
+            exit 1
+          fi
+          echo "Contents after move:"
+          ls -R ./site
 
       - name: Upload to GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./html
+          path: ./site
 
   deploy-pages:
     name: Publish to GitHub Pages
